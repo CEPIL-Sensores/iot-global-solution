@@ -1,0 +1,542 @@
+[
+    {
+        "id": "b44ab710a3bcd9ba",
+        "type": "tab",
+        "label": "Dados para API .NET",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "4259a4bea11183d1",
+        "type": "mqtt in",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "topic": "ruan_gaspar/feeds/sensores",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "925b94acf6c79c58",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 80,
+        "wires": [
+            [
+                "b117747143839679",
+                "645494bcbe092e66"
+            ]
+        ]
+    },
+    {
+        "id": "b117747143839679",
+        "type": "json",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "07c6bef410112441"
+            ]
+        ]
+    },
+    {
+        "id": "9b2d2af417c26b30",
+        "type": "ui_gauge",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "group": "fd38b5ea93e5ad72",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "C°",
+        "format": "{{value}}",
+        "min": "15",
+        "max": "40",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 530,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "07c6bef410112441",
+        "type": "function",
+        "z": "b44ab710a3bcd9ba",
+        "name": "Função ",
+        "func": "let data = msg.payload;\n\nglobal.set('ultimoDadoSensor', data);\n\nlet msgTemp = { payload: data.temperatura };\n\nlet msgUmid = { payload: data.umidade };\n\nlet msgCO = { payload: data.co};\n\nlet msgCO2 = { payload: data.co2};\n\nlet msgCH4 = { payload: data.ch4 };\n\nlet msgH2S = { payload: data.h2s };\n\nlet msgHttp = { \n    payload: { \n        temperatura: data.temperatura, \n        umidade: data.umidade, \n        co: data.co,\n        co2: data.co2,\n        ch4: data.ch4, \n        h2s: data.h2s\n    } \n};\n\nreturn [msgTemp, msgUmid, msgCO, msgCO2, msgCH4, msgH2S, msgHttp];\n",
+        "outputs": 7,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 220,
+        "wires": [
+            [
+                "9b2d2af417c26b30"
+            ],
+            [
+                "e56ed5c3425c7872"
+            ],
+            [
+                "b625339f22554e96"
+            ],
+            [
+                "1250338a3ae85d5e"
+            ],
+            [
+                "b99c37b89e3dd59c"
+            ],
+            [
+                "c10331de2d2abd73"
+            ],
+            [
+                "1adcd2db54875017"
+            ]
+        ]
+    },
+    {
+        "id": "645494bcbe092e66",
+        "type": "debug",
+        "z": "b44ab710a3bcd9ba",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "e56ed5c3425c7872",
+        "type": "ui_gauge",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "group": "fd38b5ea93e5ad72",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Umidade",
+        "label": "%",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 540,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "1adcd2db54875017",
+        "type": "http request",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://localhost:5179/api/SensorDados",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "Content-Type",
+                "keyValue": "",
+                "valueType": "application/json",
+                "valueValue": ""
+            }
+        ],
+        "x": 520,
+        "y": 280,
+        "wires": [
+            [
+                "a7cce2294cbe3161"
+            ]
+        ]
+    },
+    {
+        "id": "a7cce2294cbe3161",
+        "type": "debug",
+        "z": "b44ab710a3bcd9ba",
+        "name": "debug http",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "7f44015be4f02fe3",
+        "type": "http in",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "url": "/api/sensores",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 320,
+        "wires": [
+            [
+                "22cab4050e1be57d",
+                "27d85523136bfe5f"
+            ]
+        ]
+    },
+    {
+        "id": "3408faa6f2129a7d",
+        "type": "http response",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 470,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "27d85523136bfe5f",
+        "type": "function",
+        "z": "b44ab710a3bcd9ba",
+        "name": "function 1",
+        "func": "let dados = global.get('ultimoDadoSensor') || { erro: \"Sem dados disponíveis\" };\nnode.warn(\"Dados recebidos: \" + JSON.stringify(dados));\nmsg.payload = dados;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 340,
+        "wires": [
+            [
+                "3408faa6f2129a7d",
+                "ec82102dabe0a87c"
+            ]
+        ]
+    },
+    {
+        "id": "22cab4050e1be57d",
+        "type": "debug",
+        "z": "b44ab710a3bcd9ba",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "ec82102dabe0a87c",
+        "type": "debug",
+        "z": "b44ab710a3bcd9ba",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "b625339f22554e96",
+        "type": "ui_gauge",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "group": "fd38b5ea93e5ad72",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "CO",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 550,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b99c37b89e3dd59c",
+        "type": "ui_gauge",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "group": "fd38b5ea93e5ad72",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "CH4",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "500",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 550,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "c10331de2d2abd73",
+        "type": "ui_gauge",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "group": "fd38b5ea93e5ad72",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "H2S",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 550,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "1250338a3ae85d5e",
+        "type": "ui_gauge",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "group": "fd38b5ea93e5ad72",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "CO2",
+        "label": "ppm",
+        "format": "{{value}}",
+        "min": "400",
+        "max": "2000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 550,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "4414060ea787e304",
+        "type": "http in",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "url": "/api/sensores",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 440,
+        "wires": [
+            [
+                "9f0cb12c272b0e10",
+                "d599035840a8d078"
+            ]
+        ]
+    },
+    {
+        "id": "b6a2a3a34ba9f8e0",
+        "type": "http response",
+        "z": "b44ab710a3bcd9ba",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 470,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "d599035840a8d078",
+        "type": "function",
+        "z": "b44ab710a3bcd9ba",
+        "name": "function 2",
+        "func": "let dados = global.get('ultimoDadoSensor') || { erro: \"Sem dados disponíveis\" };\nnode.warn(\"Dados recebidos: \" + JSON.stringify(dados));\nmsg.payload = dados;\nreturn msg;\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 460,
+        "wires": [
+            [
+                "b6a2a3a34ba9f8e0",
+                "23e29527c5a3cfc8"
+            ]
+        ]
+    },
+    {
+        "id": "9f0cb12c272b0e10",
+        "type": "debug",
+        "z": "b44ab710a3bcd9ba",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "23e29527c5a3cfc8",
+        "type": "debug",
+        "z": "b44ab710a3bcd9ba",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "925b94acf6c79c58",
+        "type": "mqtt-broker",
+        "name": "Adafruit IO",
+        "broker": "io.adafruit.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "fd38b5ea93e5ad72",
+        "type": "ui_group",
+        "name": "Dashboard ",
+        "tab": "ed996ba2fda7fa68",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ed996ba2fda7fa68",
+        "type": "ui_tab",
+        "name": "Dashboard",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "b0ed9c96d12d291c",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
